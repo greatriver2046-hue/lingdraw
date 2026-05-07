@@ -8,9 +8,7 @@
 runtime/
 !runtime/route_list.php
 
-# 构建产物
-*/dist/
-dist/
+
 
 # 日志文件
 *.log
