@@ -221,7 +221,7 @@ location /ws {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host;
-    proxy_read_timeout 600s; 
+    proxy_read_timeout 600s;  
 }
 ```
 
