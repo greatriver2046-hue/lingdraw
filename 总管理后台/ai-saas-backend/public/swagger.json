@@ -1,0 +1,283 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AI SaaS Admin API",
+    "description": "API documentation for the AI SaaS Admin Dashboard",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9999/index.php",
+      "description": "Local Development Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "admin"
+          },
+          "password": {
+            "type": "string",
+            "example": "admin"
+          }
+        },
+        "required": ["username", "password"]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "msg": {
+            "type": "string",
+            "example": "登录成功"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+              },
+              "user_info": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer" },
+                  "username": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SaasInstance": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "domain": { "type": "string" },
+          "admin_email": { "type": "string" },
+          "phone": { "type": "string" },
+          "status": { "type": "integer", "description": "1: Active, 0: Suspended" },
+          "quota": { "type": "integer" },
+          "used": { "type": "integer" },
+          "expiry_date": { "type": "string", "format": "date" },
+          "create_time": { "type": "integer" },
+          "update_time": { "type": "integer" }
+        }
+      },
+      "InstanceRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "domain": { "type": "string" },
+          "admin_email": { "type": "string" },
+          "phone": { "type": "string" },
+          "quota": { "type": "integer" },
+          "expiry_date": { "type": "string", "format": "date" }
+        },
+        "required": ["name", "domain", "admin_email", "phone", "expiry_date"]
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "integer", "example": 200 },
+          "msg": { "type": "string", "example": "success" },
+          "data": { "type": "object" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/admin/auth/login": {
+      "post": {
+        "summary": "Admin Login",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+    "/admin/instances": {
+      "get": {
+        "summary": "List SaaS Instances",
+        "tags": ["Instances"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "in": "query", "name": "page", "schema": { "type": "integer", "default": 1 } },
+          { "in": "query", "name": "limit", "schema": { "type": "integer", "default": 10 } },
+          { "in": "query", "name": "keyword", "schema": { "type": "string" } },
+          { "in": "query", "name": "status", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "msg": { "type": "string" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total": { "type": "integer" },
+                        "per_page": { "type": "integer" },
+                        "current_page": { "type": "integer" },
+                        "last_page": { "type": "integer" },
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/SaasInstance" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create SaaS Instance",
+        "tags": ["Instances"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InstanceRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Instance created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/instances/{id}": {
+      "put": {
+        "summary": "Update SaaS Instance",
+        "tags": ["Instances"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InstanceRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Instance updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete SaaS Instance",
+        "tags": ["Instances"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Instance deleted",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/instances/{id}/status": {
+      "patch": {
+        "summary": "Update Instance Status",
+        "tags": ["Instances"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "integer", "enum": [0, 1] }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

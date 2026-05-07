@@ -1,0 +1,12 @@
+__vite_ssr_exportName__("config", () => { try { return config } catch {} });
+__vite_ssr_import_meta__.env = {"BASE_URL": "/", "DEV": true, "MODE": "test", "PROD": false, "SSR": false};const config = {
+  // 后端 API 地址
+  API_BASE_URL: Object.assign(/* istanbul ignore next */ globalThis.__vitest_worker__?.metaEnv ?? __vite_ssr_import_meta__.env).VITE_API_URL || 'http://127.0.0.1:9998',
+  
+  // WebSocket 地址
+  WS_URL: Object.assign(/* istanbul ignore next */ globalThis.__vitest_worker__?.metaEnv ?? __vite_ssr_import_meta__.env).VITE_WS_URL || 'ws://localhost:2348'
+}
+//# sourceMappingSource=vite-generated
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBQUEsQ0FBQTtBQUFBLHdCQUFPLENBQUssR0FBQyxJQUFNLENBQUMsUUFBRztBQUN2QixDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQztBQUNkLENBQUMsQ0FBQyxZQUFZLENBQUMsQ0FBQywrR0FBZSxDQUFDLFlBQVksQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDO0FBQ3hFLENBQUMsQ0FBQztBQUNGLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxTQUFTLENBQUMsQ0FBQyxDQUFDO0FBQ2pCLENBQUMsQ0FBQyxNQUFNLENBQUMsQ0FBQywrR0FBZSxDQUFDLFdBQVcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQztBQUM5RCxDQUFDIiwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJpbmRleC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgY29uc3QgY29uZmlnID0ge1xyXG4gIC8vIOWQjuerryBBUEkg5Zyw5Z2AXHJcbiAgQVBJX0JBU0VfVVJMOiBpbXBvcnQubWV0YS5lbnYuVklURV9BUElfVVJMIHx8ICdodHRwOi8vMTI3LjAuMC4xOjk5OTgnLFxyXG4gIFxyXG4gIC8vIFdlYlNvY2tldCDlnLDlnYBcclxuICBXU19VUkw6IGltcG9ydC5tZXRhLmVudi5WSVRFX1dTX1VSTCB8fCAnd3M6Ly9sb2NhbGhvc3Q6MjM0OCdcclxufVxyXG4iXSwiZmlsZSI6Ii9zcmMvY29uZmlnL2luZGV4LmpzIn0=
+
+//# vitestCache=W3siZmlsZSI6IjEiLCJpZCI6IjEiLCJ1cmwiOiIyIiwiaW1wb3J0ZXJzIjoiMyIsImltcG9ydGVkVXJscyI6IjQiLCJtYXBwaW5ncyI6ZmFsc2V9LCJIOi/oh6rlt7Hpobnnm64vc2Fhc0FJ55Sf5oiQ5bmz5Y+wL0FJc2Fhcy/nlKjmiLfnq68vc3JjL2NvbmZpZy9pbmRleC5qcyIsIi9zcmMvY29uZmlnL2luZGV4LmpzIixbXSxbXV0=

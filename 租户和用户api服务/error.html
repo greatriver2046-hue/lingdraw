@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>系统发生错误</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+        /* Base */
+        body {
+            color: #333;
+            font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 20px 20px;
+        }
+        h1{
+            margin: 10px 0 0;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+        }
+        h2{
+            color: #4288ce;
+            font-weight: 400;
+            padding: 6px 0;
+            margin: 6px 0 0;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+        }
+        h3{
+            margin: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        abbr{
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        a{
+            color: #868686;
+            cursor: pointer;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        .line-error{
+            background: #f8cbcb;
+        }
+        .echo table {
+            width: 100%;
+        }
+        .echo pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f7f7f7;
+            border: 0;
+            border-radius: 3px;
+            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        .echo pre > pre {
+            padding: 0;
+            margin: 0;
+        }
+        /* Exception Info */
+        .exception {
+            margin-top: 20px;
+        }
+        .exception .message{
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-bottom: 0 none;
+            line-height: 18px;
+            font-size:16px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑",serif;
+        }
+        .exception .code{
+            float: left;
+            text-align: center;
+            color: #fff;
+            margin-right: 12px;
+            padding: 16px;
+            border-radius: 4px;
+            background: #999;
+        }
+        .exception .source-code{
+            padding: 6px;
+            border: 1px solid #ddd;
+
+            background: #f9f9f9;
+            overflow-x: auto;
+
+        }
+        .exception .source-code pre{
+            margin: 0;
+        }
+        .exception .source-code pre ol{
+            margin: 0;
+            color: #4288ce;
+            display: inline-block;
+            min-width: 100%;
+            box-sizing: border-box;
+            font-size:14px;
+            font-family: "Century Gothic",Consolas,"Liberation Mono",Courier,Verdana,serif;
+            padding-left: 40px;
+        }
+        .exception .source-code pre li{
+            border-left: 1px solid #ddd;
+            height: 18px;
+            line-height: 18px;
+        }
+        .exception .source-code pre code{
+            color: #333;
+            height: 100%;
+            display: inline-block;
+            border-left: 1px solid #fff;
+            font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑",serif;
+        }
+        .exception .trace{
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-top: 0 none;
+            line-height: 16px;
+            font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑",serif;
+        }
+        .exception .trace h2:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .exception .trace ol{
+            margin: 12px;
+        }
+        .exception .trace ol li{
+            padding: 2px 4px;
+        }
+        .exception div:last-child{
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Exception Variables */
+        .exception-var table{
+            width: 100%;
+            margin: 12px 0;
+            box-sizing: border-box;
+            table-layout:fixed;
+            word-wrap:break-word;
+        }
+        .exception-var table caption{
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 6px 0;
+        }
+        .exception-var table caption small{
+            font-weight: 300;
+            display: inline-block;
+            margin-left: 10px;
+            color: #ccc;
+        }
+        .exception-var table tbody{
+            font-size: 13px;
+            font-family: Consolas, "Liberation Mono", Courier, "微软雅黑",serif;
+        }
+        .exception-var table td{
+            padding: 0 6px;
+            vertical-align: top;
+            word-break: break-all;
+        }
+        .exception-var table td:first-child{
+            width: 28%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .exception-var table td pre{
+            margin: 0;
+        }
+
+        /* Copyright Info */
+        .copyright{
+            margin-top: 24px;
+            padding: 12px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* SPAN elements with the classes below are added by prettyprint. */
+        pre.prettyprint .pln { color: #000 }  /* plain text */
+        pre.prettyprint .str { color: #080 }  /* string content */
+        pre.prettyprint .kwd { color: #008 }  /* a keyword */
+        pre.prettyprint .com { color: #800 }  /* a comment */
+        pre.prettyprint .typ { color: #606 }  /* a type name */
+        pre.prettyprint .lit { color: #066 }  /* a literal value */
+        /* punctuation, lisp open bracket, lisp close bracket */
+        pre.prettyprint .pun, pre.prettyprint .opn, pre.prettyprint .clo { color: #660 }
+        pre.prettyprint .tag { color: #008 }  /* a markup tag name */
+        pre.prettyprint .atn { color: #606 }  /* a markup attribute name */
+        pre.prettyprint .atv { color: #080 }  /* a markup attribute value */
+        pre.prettyprint .dec, pre.prettyprint .var { color: #606 }  /* a declaration; a variable name */
+        pre.prettyprint .fun { color: red }  /* a function name */
+    </style>
+</head>
+<body>
+                <div class="exception">
+        <div class="message">
+            <div class="info">
+                <div>
+                    <h2>#0 [0]<abbr title="ArgumentCountError">ArgumentCountError</abbr> in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\BaseController.php line 44">BaseController.php line 44</a></h2>
+                </div>
+                <div><h1>Too few arguments to function app\BaseController::__construct(), 0 passed in H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\route\app.php on line 23 and exactly 1 expected</h1></div>
+            </div>
+        </div>
+                            <div class="source-code">
+                    <pre class="prettyprint lang-php"><ol start="35"><li class="line-0-35"><code>     * @var array
+</code></li><li class="line-0-36"><code>     */
+</code></li><li class="line-0-37"><code>    protected $middleware = [];
+</code></li><li class="line-0-38"><code>
+</code></li><li class="line-0-39"><code>    /**
+</code></li><li class="line-0-40"><code>     * 构造方法
+</code></li><li class="line-0-41"><code>     * @access public
+</code></li><li class="line-0-42"><code>     * @param  App  $app  应用对象
+</code></li><li class="line-0-43"><code>     */
+</code></li><li class="line-0-44 line-error"><code>    public function __construct(App $app)
+</code></li><li class="line-0-45"><code>    {
+</code></li><li class="line-0-46"><code>        $this-&gt;app     = $app;
+</code></li><li class="line-0-47"><code>        $this-&gt;request = $this-&gt;app-&gt;request;
+</code></li><li class="line-0-48"><code>
+</code></li><li class="line-0-49"><code>        // 控制器初始化
+</code></li><li class="line-0-50"><code>        $this-&gt;initialize();
+</code></li><li class="line-0-51"><code>    }
+</code></li><li class="line-0-52"><code>
+</code></li><li class="line-0-53"><code>    // 初始化
+</code></li></ol></pre>
+                </div>
+                    <div class="trace">
+            <h2 data-expand="1">Call Stack</h2>
+            <ol>
+                <li>in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\BaseController.php line 44">BaseController.php line 44</a></li>
+                                    <li>
+                        at <abbr title="app\BaseController">BaseController</abbr>->__construct() in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\route\app.php line 23">app.php line 23</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Http">Http</abbr>->{closure}() in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Container.php line 294">Container.php line 294</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Container">Container</abbr>->invokeFunction(<em>object</em>(<abbr title="Closure">Closure</abbr>), ['username' => 'testduplicate1', 'password' => '123456', 'status' => '1']) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Container.php line 358">Container.php line 358</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Container">Container</abbr>->invoke(<em>object</em>(<abbr title="Closure">Closure</abbr>), ['username' => 'testduplicate1', 'password' => '123456', 'status' => '1']) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\dispatch\Callback.php line 27">Callback.php line 27</a>                    </li>
+                                    <li>
+                        at <abbr title="think\route\dispatch\Callback">Callback</abbr>->exec() in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\Dispatch.php line 80">Dispatch.php line 80</a>                    </li>
+                                    <li>
+                        at <abbr title="think\route\Dispatch">Dispatch</abbr>->run() in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Route.php line 793">Route.php line 793</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Route">Route</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 59">Pipeline.php line 59</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\middleware\Cors.php line 22">Cors.php line 22</a>                    </li>
+                                    <li>
+                        at <abbr title="app\middleware\Cors">Cors</abbr>->handle(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>))                    </li>
+                                    <li>
+                        at call_user_func([<em>object</em>(<abbr title="app\middleware\Cors">Cors</abbr>), 'handle'], <em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php line 142">Middleware.php line 142</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 85">Pipeline.php line 85</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 66">Pipeline.php line 66</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->then(<em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Route.php line 794">Route.php line 794</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Route">Route</abbr>->dispatch(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Http.php line 216">Http.php line 216</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Http">Http</abbr>->dispatchToRoute(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Http.php line 206">Http.php line 206</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Http">Http</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 59">Pipeline.php line 59</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-multi-app\src\MultiApp.php line 45">MultiApp.php line 45</a>                    </li>
+                                    <li>
+                        at <abbr title="think\app\MultiApp">MultiApp</abbr>->handle(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>))                    </li>
+                                    <li>
+                        at call_user_func([<em>object</em>(<abbr title="think\app\MultiApp">MultiApp</abbr>), 'handle'], <em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php line 142">Middleware.php line 142</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 85">Pipeline.php line 85</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\middleware\AllowCrossDomain.php line 61">AllowCrossDomain.php line 61</a>                    </li>
+                                    <li>
+                        at <abbr title="think\middleware\AllowCrossDomain">AllowCrossDomain</abbr>->handle(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>))                    </li>
+                                    <li>
+                        at call_user_func([<em>object</em>(<abbr title="think\middleware\AllowCrossDomain">AllowCrossDomain</abbr>), 'handle'], <em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php line 142">Middleware.php line 142</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 85">Pipeline.php line 85</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\middleware\InjectJwt.php line 14">InjectJwt.php line 14</a>                    </li>
+                                    <li>
+                        at <abbr title="thans\jwt\middleware\InjectJwt">InjectJwt</abbr>->handle(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>))                    </li>
+                                    <li>
+                        at call_user_func([<em>object</em>(<abbr title="thans\jwt\middleware\InjectJwt">InjectJwt</abbr>), 'handle'], <em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php line 142">Middleware.php line 142</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 85">Pipeline.php line 85</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-trace\src\TraceDebug.php line 71">TraceDebug.php line 71</a>                    </li>
+                                    <li>
+                        at <abbr title="think\trace\TraceDebug">TraceDebug</abbr>->handle(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>))                    </li>
+                                    <li>
+                        at call_user_func([<em>object</em>(<abbr title="think\trace\TraceDebug">TraceDebug</abbr>), 'handle'], <em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php line 142">Middleware.php line 142</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 85">Pipeline.php line 85</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->think\{closure}(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php line 66">Pipeline.php line 66</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Pipeline">Pipeline</abbr>->then(<em>object</em>(<abbr title="Closure">Closure</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Http.php line 207">Http.php line 207</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Http">Http</abbr>->runWithRequest(<em>object</em>(<abbr title="app\Request">Request</abbr>)) in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Http.php line 170">Http.php line 170</a>                    </li>
+                                    <li>
+                        at <abbr title="think\Http">Http</abbr>->run() in <a class="toggle" title="H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\public\index.php line 20">index.php line 20</a>                    </li>
+                            </ol>
+        </div>
+    </div>
+                
+    
+        <div class="exception-var">
+        <h2>Environment Variables</h2>
+                <table>
+                        <caption>GET Data<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>POST Data</caption>
+            <tbody>
+                                <tr>
+                    <td>username</td>
+                    <td>testduplicate1</td>
+                </tr>
+                                <tr>
+                    <td>password</td>
+                    <td>123456</td>
+                </tr>
+                                <tr>
+                    <td>status</td>
+                    <td>1</td>
+                </tr>
+                            </tbody>
+                    </table>
+                <table>
+                        <caption>Files<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Cookies<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Session<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Server/Request Data</caption>
+            <tbody>
+                                <tr>
+                    <td>DOCUMENT_ROOT</td>
+                    <td>H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\public</td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_ADDR</td>
+                    <td>127.0.0.1</td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_PORT</td>
+                    <td>49795</td>
+                </tr>
+                                <tr>
+                    <td>SERVER_SOFTWARE</td>
+                    <td>PHP 7.4.33 Development Server</td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PROTOCOL</td>
+                    <td>HTTP/1.1</td>
+                </tr>
+                                <tr>
+                    <td>SERVER_NAME</td>
+                    <td>0.0.0.0</td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PORT</td>
+                    <td>9998</td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_URI</td>
+                    <td>/api/test/user/save</td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_METHOD</td>
+                    <td>POST</td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_NAME</td>
+                    <td>/index.php</td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_FILENAME</td>
+                    <td>H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\public\index.php</td>
+                </tr>
+                                <tr>
+                    <td>PATH_INFO</td>
+                    <td>/api/test/user/save</td>
+                </tr>
+                                <tr>
+                    <td>PHP_SELF</td>
+                    <td>/index.php/api/test/user/save</td>
+                </tr>
+                                <tr>
+                    <td>HTTP_HOST</td>
+                    <td>127.0.0.1:9998</td>
+                </tr>
+                                <tr>
+                    <td>HTTP_USER_AGENT</td>
+                    <td>curl/8.16.0</td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT</td>
+                    <td>*/*</td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_LENGTH</td>
+                    <td>48</td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CONTENT_LENGTH</td>
+                    <td>48</td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_TYPE</td>
+                    <td>application/x-www-form-urlencoded</td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CONTENT_TYPE</td>
+                    <td>application/x-www-form-urlencoded</td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME_FLOAT</td>
+                    <td>1768072389.5851</td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME</td>
+                    <td>1768072389</td>
+                </tr>
+                            </tbody>
+                    </table>
+            </div>
+    
+    <div class="copyright">
+        <a title="官方网站" href="http://www.thinkphp.cn">ThinkPHP</a> 
+        <span>V6.1.4</span> 
+        <span>{ 十年磨一剑-为API开发设计的高性能框架 }</span>
+        <span>- <a title="官方手册" href="https://www.kancloud.cn/manual/thinkphp6_0/content">官方手册</a></span>
+    </div>
+        <script>
+        function $(selector, node){
+            var elements;
+
+            node = node || document;
+            if(document.querySelectorAll){
+                elements = node.querySelectorAll(selector);
+            } else {
+                switch(selector.substr(0, 1)){
+                    case '#':
+                        elements = [node.getElementById(selector.substr(1))];
+                        break;
+                    case '.':
+                        if(document.getElementsByClassName){
+                            elements = node.getElementsByClassName(selector.substr(1));
+                        } else {
+                            elements = get_elements_by_class(selector.substr(1), node);
+                        }
+                        break;
+                    default:
+                        elements = node.getElementsByTagName();
+                }
+            }
+            return elements;
+
+            function get_elements_by_class(search_class, node, tag) {
+                var elements = [], eles, 
+                    pattern  = new RegExp('(^|\\s)' + search_class + '(\\s|$)');
+
+                node = node || document;
+                tag  = tag  || '*';
+
+                eles = node.getElementsByTagName(tag);
+                for(var i = 0; i < eles.length; i++) {
+                    if(pattern.test(eles[i].className)) {
+                        elements.push(eles[i])
+                    }
+                }
+
+                return elements;
+            }
+        }
+
+        $.getScript = function(src, func){
+            var script = document.createElement('script');
+            
+            script.async  = 'async';
+            script.src    = src;
+            script.onload = func || function(){};
+            
+            $('head')[0].appendChild(script);
+        }
+
+        ;(function(){
+            var files = $('.toggle');
+            var ol    = $('ol', $('.prettyprint')[0]);
+            var li    = $('li', ol[0]);   
+
+            // 短路径和长路径变换
+            for(var i = 0; i < files.length; i++){
+                files[i].ondblclick = function(){
+                    var title = this.title;
+
+                    this.title = this.innerHTML;
+                    this.innerHTML = title;
+                }
+            }
+
+            (function () {
+                var expand = function (dom, expand) {
+                    var ol = $('ol', dom.parentNode)[0];
+                    expand = undefined === expand ? dom.attributes['data-expand'].value === '0' : undefined;
+                    if (expand) {
+                        dom.attributes['data-expand'].value = '1';
+                        ol.style.display = 'none';
+                        dom.innerText = 'Call Stack (展开)';
+                    } else {
+                        dom.attributes['data-expand'].value = '0';
+                        ol.style.display = 'block';
+                        dom.innerText = 'Call Stack (折叠)';
+                    }
+                };
+                var traces = $('.trace');
+                for (var i = 0; i < traces.length; i ++) {
+                    var h2 = $('h2', traces[i])[0];
+                    expand(h2);
+                    h2.onclick = function () {
+                        expand(this);
+                    };
+                }
+            })();
+
+            $.getScript('//cdn.bootcdn.net/ajax/libs/prettify/r298/prettify.min.js', function(){
+                prettyPrint();
+            });
+        })();
+    </script>
+    <div id="think_page_trace" style="position: fixed;bottom:0;right:0;font-size:14px;width:100%;z-index: 999999;color: #000;text-align:left;font-family:'微软雅黑';">
+    <div id="think_page_trace_tab" style="display: none;background:white;margin:0;height: 250px;">
+        <div id="think_page_trace_tab_tit" style="height:30px;padding: 6px 12px 0;border-bottom:1px solid #ececec;border-top:1px solid #ececec;font-size:16px">
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">基本</span>
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">文件</span>
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">流程</span>
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">错误</span>
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">SQL</span>
+                        <span style="color:#000;padding-right:12px;height:30px;line-height:30px;display:inline-block;margin-right:3px;cursor:pointer;font-weight:700">调试</span>
+                    </div>
+        <div id="think_page_trace_tab_cont" style="overflow:auto;height:212px;padding:0;line-height: 24px">
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                    <li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">请求信息 : 2026-01-11 03:13:09 HTTP/1.1 POST : http://127.0.0.1:9998/api/test/user/save</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">运行时间 : 0.013608s [ 吞吐率：73.49req/s ] 内存消耗：557.61kb 文件加载：155</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">查询信息 : 0 queries</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">缓存信息 : 0 reads,0 writes</li>                </ol>
+            </div>
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                    <li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\public\router.php ( 0.78 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\public\index.php ( 0.79 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\autoload.php ( 0.75 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\composer\autoload_real.php ( 1.58 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\composer\ClassLoader.php ( 16.14 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\composer\autoload_static.php ( 8.92 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-helper\src\helper.php ( 8.34 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\symfony\polyfill-php80\bootstrap.php ( 1.50 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\stubs\load_stubs.php ( 0.16 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Exception.php ( 1.69 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Facade.php ( 2.71 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\symfony\polyfill-mbstring\bootstrap.php ( 8.26 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\symfony\deprecation-contracts\function.php ( 0.98 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\ralouphie\getallheaders\src\getallheaders.php ( 1.60 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\symfony\translation\Resources\functions.php ( 0.55 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\ezyang\htmlpurifier\library\HTMLPurifier.composer.php ( 0.10 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\guzzlehttp\guzzle\src\functions_include.php ( 0.16 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\guzzlehttp\guzzle\src\functions.php ( 5.55 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\symfony\var-dumper\Resources\functions\dump.php ( 0.79 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\helper.php ( 0.28 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\App.php ( 14.17 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Container.php ( 15.38 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\psr\container\src\ContainerInterface.php ( 1.02 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-queue\src\common.php ( 1.01 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\provider.php ( 0.19 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Http.php ( 6.12 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-helper\src\helper\Str.php ( 7.29 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Env.php ( 4.64 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\common.php ( 0.03 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\helper.php ( 18.44 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Config.php ( 5.03 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\app.php ( 1.05 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\facade\Env.php ( 1.67 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\cache.php ( 0.80 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\console.php ( 0.48 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\cookie.php ( 0.56 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\database.php ( 2.22 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\filesystem.php ( 0.63 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\gateway_worker.php ( 1.94 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\jwt.php ( 0.41 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\lang.php ( 0.81 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\log.php ( 1.37 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\middleware.php ( 0.19 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\queue.php ( 1.38 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\route.php ( 1.54 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\session.php ( 0.57 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\trace.php ( 0.34 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\view.php ( 0.82 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\worker.php ( 1.58 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\config\worker_server.php ( 1.96 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\event.php ( 0.25 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Event.php ( 6.96 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\service.php ( 0.13 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\AppService.php ( 0.26 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Service.php ( 1.67 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Lang.php ( 7.60 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\lang\zh-cn.php ( 12.88 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\initializer\Error.php ( 3.27 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\initializer\RegisterService.php ( 1.33 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\services.php ( 0.30 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\service\PaginatorService.php ( 1.52 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\service\ValidateService.php ( 0.99 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\service\ModelService.php ( 1.76 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\Service.php ( 0.32 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-migration\src\Service.php ( 1.94 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-multi-app\src\Service.php ( 1.08 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-queue\src\queue\Service.php ( 1.24 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-trace\src\Service.php ( 0.77 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Middleware.php ( 6.78 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-worker\src\Service.php ( 0.96 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Console.php ( 22.65 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\initializer\BootService.php ( 0.77 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\Paginator.php ( 11.80 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Validate.php ( 46.10 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\Model.php ( 25.67 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-helper\src\contract\Arrayable.php ( 0.09 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-helper\src\contract\Jsonable.php ( 0.13 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\model\concern\Attribute.php ( 17.61 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\model\concern\RelationShip.php ( 26.12 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\model\concern\ModelEvent.php ( 2.27 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\model\concern\TimeStamp.php ( 5.70 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\model\concern\Conversion.php ( 10.41 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Db.php ( 2.87 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-orm\src\DbManager.php ( 8.28 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Log.php ( 8.50 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Manager.php ( 3.98 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\psr\log\Psr\Log\LoggerInterface.php ( 3.04 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Cache.php ( 4.79 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\psr\simple-cache\src\CacheInterface.php ( 4.50 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-helper\src\helper\Arr.php ( 16.63 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\cache\driver\File.php ( 7.42 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\cache\Driver.php ( 8.06 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\contract\CacheHandlerInterface.php ( 2.25 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\Request.php ( 0.09 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Request.php ( 54.04 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\middleware.php ( 0.33 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Pipeline.php ( 2.61 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-trace\src\TraceDebug.php ( 2.94 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\middleware\InjectJwt.php ( 0.29 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\provider\JWT.php ( 3.06 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\config\config.php ( 0.68 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\facade\Config.php ( 1.37 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\provider\storage\Tp5.php ( 0.39 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\contract\Storage.php ( 0.17 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\Blacklist.php ( 1.78 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Builder.php ( 10.75 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Parsing\Encoder.php ( 1.12 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Claim\Factory.php ( 2.61 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Parser.php ( 3.54 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Parsing\Decoder.php ( 1.27 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\provider\JWT\Lcobucci.php ( 3.37 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\provider\JWT\Provider.php ( 1.15 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Signer\Hmac\Sha256.php ( 0.59 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Signer\Hmac.php ( 1.59 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Signer\BaseSigner.php ( 1.65 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\qeq66\jwt\src\Signer.php ( 1.26 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\claim\Factory.php ( 2.05 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\Payload.php ( 1.23 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\Manager.php ( 2.91 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\parser\AuthHeader.php ( 0.70 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\contract\Parser.php ( 0.12 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\parser\Cookie.php ( 0.27 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\parser\KeyTrait.php ( 0.24 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\parser\Param.php ( 0.26 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\facade\JWTAuth.php ( 0.60 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\JWTAuth.php ( 1.56 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\JWT.php ( 2.12 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\thans\tp-jwt-auth\src\parser\Parser.php ( 0.84 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\middleware\AllowCrossDomain.php ( 2.08 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-multi-app\src\MultiApp.php ( 7.06 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Route.php ( 23.96 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\RuleName.php ( 5.33 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\Domain.php ( 5.55 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\RuleGroup.php ( 13.61 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\Rule.php ( 22.85 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\RuleItem.php ( 8.81 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\route\app.php ( 6.00 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\facade\Route.php ( 4.88 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\dispatch\Callback.php ( 0.93 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\route\Dispatch.php ( 6.49 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\middleware\Cors.php ( 0.87 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\controller\api\User.php ( 7.16 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\BaseController.php ( 2.03 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\ExceptionHandle.php ( 1.37 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\exception\Handle.php ( 10.02 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\log\driver\File.php ( 6.17 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\contract\LogHandlerInterface.php ( 0.86 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\log\Channel.php ( 6.54 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\event\LogRecord.php ( 0.86 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Response.php ( 8.60 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\tpl\think_exception.tpl ( 17.06 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\facade\App.php ( 2.73 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\response\Html.php ( 0.98 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\framework\src\think\Cookie.php ( 6.28 KB )</li><li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\vendor\topthink\think-trace\src\Html.php ( 4.49 KB )</li>                </ol>
+            </div>
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                                    </ol>
+            </div>
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                    <li style="border-bottom:1px solid #EEE;font-size:14px;padding:0 12px">[0]Too few arguments to function app\BaseController::__construct(), 0 passed in H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\route\app.php on line 23 and exactly 1 expected[H:\自己项目\saasAI生成平台\AIsaas\租户和用户api服务\app\BaseController.php:44]</li>                </ol>
+            </div>
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                                    </ol>
+            </div>
+                        <div style="display:none;">
+                <ol style="padding: 0; margin:0">
+                                    </ol>
+            </div>
+                    </div>
+    </div>
+    <div id="think_page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor:pointer;"><img style="vertical-align:top;" src="data:image/gif;base64,R0lGODlhDwAPAJEAAAAAAAMDA////wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUQxMjc1MUJCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUQxMjc1MUNCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRDEyNzUxOUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxRDEyNzUxQUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAAAAAAALAAAAAAPAA8AAAIdjI6JZqotoJPR1fnsgRR3C2jZl3Ai9aWZZooV+RQAOw==" /></div>
+</div>
+<div id="think_page_trace_open" style="height:30px;float:right;text-align:right;overflow:hidden;position:fixed;bottom:0;right:0;color:#000;line-height:30px;cursor:pointer;">
+    <div style="background:#232323;color:#FFF;padding:0 6px;float:right;line-height:30px;font-size:14px">0.017212s </div>
+    <img width="30" style="" title="ShowPageTrace" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVERDVENkZGQjkyNDExRTE5REY3RDQ5RTQ2RTRDQUJCIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVERDVENzAwQjkyNDExRTE5REY3RDQ5RTQ2RTRDQUJCIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NURENUQ2RkRCOTI0MTFFMTlERjdENDlFNDZFNENBQkIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NURENUQ2RkVCOTI0MTFFMTlERjdENDlFNDZFNENBQkIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5fx6IRAAAMCElEQVR42sxae3BU1Rk/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">
+</div>
+
+<script type="text/javascript">
+    (function(){
+        var tab_tit  = document.getElementById('think_page_trace_tab_tit').getElementsByTagName('span');
+        var tab_cont = document.getElementById('think_page_trace_tab_cont').getElementsByTagName('div');
+        var open     = document.getElementById('think_page_trace_open');
+        var close    = document.getElementById('think_page_trace_close').children[0];
+        var trace    = document.getElementById('think_page_trace_tab');
+        var cookie   = document.cookie.match(/thinkphp_show_page_trace=(\d\|\d)/);
+        var history  = (cookie && typeof cookie[1] != 'undefined' && cookie[1].split('|')) || [0,0];
+        open.onclick = function(){
+            trace.style.display = 'block';
+            this.style.display = 'none';
+            close.parentNode.style.display = 'block';
+            history[0] = 1;
+            document.cookie = 'thinkphp_show_page_trace='+history.join('|')
+        }
+        close.onclick = function(){
+            trace.style.display = 'none';
+            this.parentNode.style.display = 'none';
+            open.style.display = 'block';
+            history[0] = 0;
+            document.cookie = 'thinkphp_show_page_trace='+history.join('|')
+        }
+        for(var i = 0; i < tab_tit.length; i++){
+            tab_tit[i].onclick = (function(i){
+                return function(){
+                    for(var j = 0; j < tab_cont.length; j++){
+                        tab_cont[j].style.display = 'none';
+                        tab_tit[j].style.color = '#999';
+                    }
+                    tab_cont[i].style.display = 'block';
+                    tab_tit[i].style.color = '#000';
+                    history[1] = i;
+                    document.cookie = 'thinkphp_show_page_trace='+history.join('|')
+                }
+            })(i)
+        }
+        parseInt(history[0]) && open.click();
+        tab_tit[history[1]].click();
+    })();
+</script>
+</body>
+</html>

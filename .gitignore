@@ -1,0 +1,50 @@
+# 环境配置
+.env
+.env.backup
+.env.local
+.env.*.local
+
+# 运行时目录
+runtime/
+!runtime/route_list.php
+
+# 构建产物
+*/dist/
+dist/
+
+# 日志文件
+*.log
+logs/
+
+# 缓存
+cache/
+*/cache/
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# 依赖目录
+vendor/
+node_modules/
+
+# 上传文件
+storage/uploads/
+*/storage/uploads/
+
+# 模型文件（可选，如果不需要可以取消注释）
+# *.vrm
+
+# 编译文件
+*.pyc
+*.pyo
+__pycache__/
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.zip
