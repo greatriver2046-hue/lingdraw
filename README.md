@@ -1,6 +1,6 @@
-# LingDraw AI SaaS Platform
+# LingDraw灵绘
 
-灵绘 AI 生成平台，基于 Vue 3 + ThinkPHP 6 的 SaaS 多租户 AI 内容生成系统，支持图片生成、视频生成、写作等多种 AI 能力。
+灵绘 AI 无限画布作图agent，基于 Vue 3 + ThinkPHP 6 的 SaaS 多租户 AI 内容生成系统。
 
 ## 项目架构
 
