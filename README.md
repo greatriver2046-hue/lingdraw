@@ -2,7 +2,8 @@
 
 灵绘 AI 无限画布作图agent，基于 Vue 3 + ThinkPHP 6 的 SaaS 多租户 AI 内容生成系统。
 
-
+![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/5.png)
+![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/4.png)
 
 
 ## 项目架构
@@ -48,7 +49,8 @@ lingdraw/
 
 ### 部署帮助联系方式
 配置较复杂，如果需要可以联系作者代一条龙部署
-![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg)
+<img width="400" src="https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg">
+
 
 QQ:1211284542
 
