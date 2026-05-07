@@ -7,8 +7,6 @@
 ![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/1.png)
 ![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/2.png)
 ![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/3.png)
-![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/4.png)
-![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/6.png)
 
 
 ## 项目架构
