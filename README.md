@@ -99,6 +99,31 @@ composer install
 
 ```
 
+伪静态规则
+
+```
+# 保护目录（保留）
+location ~* (runtime|application)/ {
+  return 403;
+}
+
+# 1) API：总管理后台接口前缀是 /admin/
+location ^~ /admin/ {
+  if (!-e $request_filename) {
+    rewrite ^(.*)$ /index.php?s=$1 last;
+    break;
+  }
+}
+
+# 2) PHP 入口（按你原来站点的 php-fpm 配置保留即可）
+# location ~ \.php$ { ... }
+
+# 3) 前端：其它所有路径，优先找静态文件，否则回退到 /index.html
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
 #### 租户用户端后端（tenant-user-api）
 
 ```bash
@@ -177,9 +202,17 @@ npm run dev
 npm run build
 ```
 
+#### 伪静态规则
+
+```
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
 ### 4. WebSocket 部署
 
-如需启用实时生成进度推送，需配置 WebSocket 反向代理（Nginx 示例）：
+实时生成进度推送，需配置 WebSocket 反向代理（Nginx 示例）：
 
 ```nginx
 location /ws {
@@ -202,7 +235,7 @@ VITE_WS_URL=wss://your-domain.com/ws
 
 ```Shell
 #在api文件夹下执行、建议加入守护进程
-php think worker:gateway -d
+php think worker:server
 ```
 
 <br />
@@ -226,7 +259,53 @@ php think package:reset
 
 <br />
 
-<br />
+### 6.伪静态规则
+
+总管理后台
+
+```
+# 保护目录（保留）
+location ~* (runtime|application)/ {
+  return 403;
+}
+
+# 1) API：总管理后台接口前缀是 /admin/
+location ^~ /admin/ {
+  if (!-e $request_filename) {
+    rewrite ^(.*)$ /index.php?s=$1 last;
+    break;
+  }
+}
+
+# 2) PHP 入口（按你原来站点的 php-fpm 配置保留即可）
+# location ~ \.php$ { ... }
+
+# 3) 前端：其它所有路径，优先找静态文件，否则回退到 /index.html
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+用户端和租户端
+
+```
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+api
+
+```
+location ~* (runtime|application)/{
+	return 403;
+}
+location / {
+	if (!-e $request_filename){
+		rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+	}
+}
+```
 
 # 开源协议
 
