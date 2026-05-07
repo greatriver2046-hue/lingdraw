@@ -25,6 +25,13 @@ lingdraw/
 └── tenant-user-api/        # 租户、用户端后端（ThinkPHP 6）
 ```
 
+<br />
+
+## 演示地址
+
+
+<http://www.xuku.cc>
+
 ## 文件夹说明
 
 | 文件夹                              | 说明                                                       |
@@ -46,8 +53,8 @@ lingdraw/
 
 ## 安装部署
 
-配置较复杂，如果需要可以联系作者代部署
-![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/10.png)
+配置较复杂，如果需要可以联系作者代一条龙部署
+![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg)
 
 <br />
 
