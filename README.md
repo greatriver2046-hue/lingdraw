@@ -5,7 +5,6 @@
 ![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/5.png)
 ![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/4.png)
 
-
 ## 项目架构
 
 ```
@@ -23,8 +22,7 @@ lingdraw/
 
 ## 演示地址
 
-
-<http://www.xuku.cc>
+[http://www.xuku.cc ](http://www.xuku.cc)
 
 ## 文件夹说明
 
@@ -48,13 +46,12 @@ lingdraw/
 ## 安装部署
 
 ### 部署帮助联系方式
-配置较复杂，如果需要可以联系作者代一条龙部署
-<img width="200" style="text-align: left;" src="https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg">
 
+配置较复杂，如果需要可以联系作者代一条龙部署 <img width="200" style="text-align: left;" src="https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg">
 
 QQ:1211284542
 
-Email:1211284542\@qq.com
+Email:<1211284542@qq.com>
 
 ### 1. 初始化数据库
 
