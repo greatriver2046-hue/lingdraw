@@ -46,7 +46,7 @@ lingdraw/
 ## 安装部署
 
 配置较复杂，如果需要可以联系作者代一条龙部署
-
+![项目截图](https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg)
 
 QQ:1211284542
 
