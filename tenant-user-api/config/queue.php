@@ -24,13 +24,13 @@ return [
         'redis'    => [
             'type'       => 'redis',
             'queue'      => 'default',
-            'host'       => '127.0.0.1',
-            'port'       => 6379,
-            'password'   => '',
-            'select'     => 0,
-            'timeout'    => 0,
-            'persistent' => false,
-            'retry_after' => 3600, // 任务过期时间，防止长任务被重复执行
+            'host'       => env('REDIS.REDIS_HOST', '127.0.0.1'),
+            'port'       => env('REDIS.REDIS_PORT', 6379),
+            'password'   => env('REDIS.REDIS_PASSWORD', ''),
+            'select'     => env('REDIS.REDIS_SELECT', 0),
+            'timeout'    => env('REDIS.REDIS_TIMEOUT', 0),
+            'persistent' => env('REDIS.REDIS_PERSISTENT', false),
+            'retry_after' => 3600,
         ],
     ],
     'failed'      => [
