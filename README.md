@@ -49,7 +49,7 @@ lingdraw/
 
 ### 部署帮助联系方式
 配置较复杂，如果需要可以联系作者代一条龙部署
-<img width="400" src="https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg">
+<img width="200" style="text-align: left;" src="https://gitee.com/byby123/lingdraw/raw/master/images/10.jpg">
 
 
 QQ:1211284542
