@@ -55,7 +55,7 @@ lingdraw/
 ## 环境要求
 
 - **PHP**: >= 7.4（推荐 PHP 8.1）
-- **Node.js**: >= 18（推荐 Node 20+）
+- **Node.js**: >= 20.19.0
 - **MySQL**: 8.0+
 - **Redis**: 6.0+
 - **Composer**: 2.x
